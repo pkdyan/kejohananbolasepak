@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kejohanan Bola Sepak PKD YAN 2025</title>
+    <!-- Memuatkan Tailwind CSS untuk gaya moden -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Tetapan Font Inter */
+        html { font-family: 'Inter', sans-serif; }
+        
+        /* Gaya custom untuk butang pendaftaran */
+        .register-button {
+            transition: all 0.3s ease;
+        }
+        .register-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(4, 120, 87, 0.4); /* Bayangan hijau */
+        }
+        
+        /* Gaya custom untuk Header Hero */
+        .hero-header {
+            background-image: url('https://i.postimg.cc/jjP7xvy8/download.jpg'); 
+            /* Gantikan URL ini dengan gambar padang/bola sepak yang cantik jika ada! */
+            background-size: cover;
+            background-position: center;
+        }
+
+        /* Gaya untuk membuat senarai lebih kemas */
+        .ul-custom li {
+            position: relative;
+            padding-left: 20px;
+            margin-bottom: 8px;
+        }
+        .ul-custom li::before {
+            content: "⚽"; /* Ikon bola sepak sebagai bullet point */
+            position: absolute;
+            left: 0;
+            color: #10B981;
+            font-size: 14px;
+        }
+        
+        /* Gaya Peta Padang */
+        .field-map {
+            background-image: linear-gradient(to bottom, rgba(255, 255, 255, 0.1), rgba(0, 0, 0, 0.1)), url('https://placehold.co/1200x400/10B981/ffffff?text=PADANG+INTERAKTIF+KLIK+PADA+KAWASAN'); 
+            background-size: cover; 
+            background-position: center;
+            border-color: #f4f4f4 !important; /* Memastikan border kelihatan */
+        }
+
+        /* Gaya Zon Klik */
+        .map-zone {
+            transition: all 0.3s ease;
+        }
+        .map-zone:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+        }
+
+        /* Label pada peta padang */
+        .map-label {
+            pointer-events: none; /* Penting untuk memastikan klik melalui label ke div induk */
+            text-shadow: 1px 1px 4px rgba(0, 0, 0, 0.7);
+        }
+
+        /* Gaya Highlight untuk 'Zoom' */
+        .highlight {
+            border: 4px solid #FCD34D !important; /* Warna kuning terang untuk highlight */
+            transition: border 0.5s ease-in-out, box-shadow 0.5s ease-in-out;
+            box-shadow: 0 0 20px rgba(252, 211, 77, 0.7); /* Kesan Glow */
+        }
+        /* Gaya Ikon WhatsApp (Inline SVG) */
+        .whatsapp-icon {
+            fill: #25D366; /* Warna hijau WhatsApp */
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+
+    <!-- Header Hero -->
+    <header class="hero-header text-white shadow-lg">
+        <div class="bg-black bg-opacity-60 py-16 md:py-24">
+            <div class="container mx-auto px-4 text-center">
+                <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-2">
+                    Kejohanan Bola Sepak 11 Sebelah 2025
+                </h1>
+                <p class="text-xl md:text-2xl font-light italic text-gray-200">
+                    Bagi Kakitangan Kesihatan Negeri Kedah | Anjuran BAKES PKD YAN
+                </p>
+                <div class="mt-6 md:mt-10">
+                    <!-- Butang Pendaftaran Jelas - Pautan ke Google Form yang baru -->
+                    <a href="https://forms.gle/ctM9HXF195PTCXeGA" target="_blank" class="register-button inline-block bg-teal-500 hover:bg-teal-600 text-white text-xl font-bold py-3 px-8 rounded-full shadow-xl uppercase tracking-wider">
+                        Daftar Pasukan Sekarang!
+                    </a>
+                    <p class="mt-2 text-sm text-gray-300">Tarikh Akhir: 8 November 2025</p>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Peta Padang Interaktif -->
+    <section class="container mx-auto px-4 py-8">
+        <h2 class="text-2xl font-bold text-center text-gray-800 mb-6">Peta Padang Interaktif: Klik Untuk Info Lanjut</h2>
+        <div id="field-map" class="relative w-full h-40 field-map rounded-lg shadow-2xl border-4 border-white overflow-hidden cursor-pointer">
+            
+            <!-- Garisan Tengah -->
+            <div class="absolute inset-y-0 left-1/2 w-1 bg-white opacity-70 transform -translate-x-1/2"></div>
+            <!-- Bulatan Tengah -->
+            <div class="absolute top-1/2 left-1/2 w-16 h-16 border-2 border-white opacity-70 rounded-full transform -translate-x-1/2 -translate-y-1/2"></div>
+
+            <!-- Klik Kiri (Syarat / Peraturan) -->
+            <div id="map-rules" class="map-zone absolute inset-y-0 left-0 w-1/2 flex items-center justify-center border-r border-white" title="Klik untuk lihat Syarat Pertandingan">
+                <span class="map-label text-white text-xl font-extrabold p-1 bg-black bg-opacity-40 rounded-md">SYARAT PERTANDINGAN</span>
+            </div>
+
+            <!-- Klik Kanan (Pendaftaran / Yuran) -->
+            <div id="map-registration" class="map-zone absolute inset-y-0 right-0 w-1/2 flex items-center justify-center border-l border-white" title="Klik untuk lihat Yuran & Pendaftaran">
+                <span class="map-label text-white text-xl font-extrabold p-1 bg-black bg-opacity-40 rounded-md">PENDAFTARAN & YURAN</span>
+            </div>
+            
+        </div>
+    </section>
+
+    <!-- Kandungan Utama dengan Kad (Cards) -->
+    <main class="container mx-auto px-4 py-12">
+        
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            
+            <!-- Kad 1: Pendaftaran & Bayaran (Target ID: registration-section-container) -->
+            <!-- Tambah kelas transition-all untuk kesan yang lebih licin -->
+            <div id="registration-section-container" class="col-span-1 lg:col-span-1 transition-all duration-500 ease-in-out">
+                <div class="registration-card bg-white p-6 rounded-xl shadow-2xl border-t-4 border-teal-500 h-full">
+                    <h2 class="text-2xl font-bold text-teal-600 mb-4 border-b pb-2">Yuran & Tarikh Penting</h2>
+                    
+                    <div class="space-y-4 text-gray-700">
+                        <p><strong>Penganjur:</strong> <span class="font-semibold text-blue-800">BAKES PKD YAN</span></p>
+                        <p class="text-3xl font-extrabold text-green-700">RM350 <span class="text-base font-normal">/ Pasukan</span></p>
+                        
+                        <hr>
+
+                        <p class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-red-500" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>
+                        <strong>Daftar:</strong> 18 Okt - 8 Nov 2025</p>
+
+                        <p class="flex items-center"><svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2 text-red-500" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z"></path><path fill-rule="evenodd" d="M18 9H2v7a2 2 0 002 2h12a2 2 0 002-2V9zM4 14a1 1 0 100 2h12a1 1 0 100-2H4z" clip-rule="evenodd"></path></svg>
+                        <strong>Bayaran Akhir:</strong> 9 November 2025</p>
+                        
+                        <div class="bg-gray-100 p-3 rounded-lg mt-4">
+                            <h3 class="font-bold text-lg text-gray-800 mb-2">Maklumat Bayaran</h3>
+                            <p class="text-sm"><strong>Bank:</strong> BANK ISLAM Tetuan Badan Kebajikan Pejabat Kesihatan Daerah Yan</p>
+                            <p class="text-lg font-bold text-red-600">NO. AKAUN: 02084 01002 9944</p>
+                        </div>
+
+                        <p class="text-sm italic text-gray-500 pt-2">Sila hantar resit bayaran dan dokumen lain melalui pautan pendaftaran di atas.</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Kad 2: Peraturan Ringkas & Kelayakan (Target ID: rules-section-container) -->
+            <!-- Tambah kelas transition-all untuk kesan yang lebih licin -->
+            <div id="rules-section-container" class="col-span-1 lg:col-span-2 transition-all duration-500 ease-in-out">
+                <div class="rules-card bg-white p-6 rounded-xl shadow-2xl border-t-4 border-blue-600 h-full">
+                    <h2 class="text-2xl font-bold text-blue-700 mb-4 border-b pb-2">Kelayakan dan Format Kejohanan</h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
+                        
+                        <!-- Kelayakan -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 flex items-center"><span class="bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center mr-2">1</span> Kelayakan Pasukan</h3>
+                            <ul class="ul-custom list-none pl-0">
+                                <li>Terbuka kepada semua staf berkhidmat di bawah JKN Kedah (tetap/kontrak).</li>
+                                <li>Terhad kepada 16 pasukan. Setiap DAERAH dibenarkan lebih dari 1 pasukan.</li>
+                                <li>Setiap pasukan boleh mendaftar 17 pemain + 1 pengurus.</li>
+                                <li>Wajib ada 1 pemain veteran (40 tahun ke atas) di dalam padang.</li>
+                                <li>Dibenarkan mengambil 2 pemain import (luar daerah).</li>
+                                <li>Pemain MyStep / Pelatih KKM TIDAK dibenarkan bermain.</li>
+                            </ul>
+                        </div>
+                        
+                        <!-- Format -->
+                        <div>
+                            <h3 class="text-xl font-semibold mb-3 flex items-center"><span class="bg-blue-100 text-blue-800 rounded-full w-6 h-6 flex items-center justify-center mr-2">2</span> Format Perlawanan</h3>
+                            <ul class="ul-custom list-none pl-0">
+                                <li>Format Liga (4 Kumpulan, 4 Pasukan per kumpulan).</li>
+                                <li>Johan dan Naib Johan kumpulan layak ke pusingan seterusnya.</li>
+                                <li>Masa Perlawanan: 15 minit x 1 minit x 15 minit.</li>
+                                <li>Fasa Knockout: Jika seri, penentuan melalui Sepakan Penalti (5 orang).</li>
+                                <li>Pasukan yang tarik diri akan dikira kalah 3-0.</li>
+                                <li>Waktu Perlawanan: Bermula tepat 8.30 pagi.</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="mt-6 p-4 bg-yellow-50 border-l-4 border-yellow-500 rounded-md text-sm text-yellow-800">
+                        <p class="font-bold">PERINGATAN DISIPLIN:</p>
+                        <p>Pasukan yang lewat melebihi 5 minit dari masa yang diminta, dianggap KALAH. Semua keputusan pengadil adalah MUKTAMAD.</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Kad 3: Hubungi Urusetia -->
+            <div class="col-span-1 lg:col-span-3">
+                 <div class="bg-white p-6 rounded-xl shadow-xl border-t-4 border-gray-400">
+                    <h2 class="text-2xl font-bold text-gray-700 mb-4 border-b pb-2">Hubungi Urusetia</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 text-gray-700">
+                        
+                        <div>
+                            <p class="text-3xl font-bold text-green-600 mb-2">Zulhilmi</p>
+                            <a href="tel:0182772732" class="text-blue-600 hover:text-blue-800 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h12a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 01-1.414 0L3.293 6.293A1 1 0 013 5.586V3z" /></svg>
+                                018-2772732
+                            </a>
+                            <!-- Pautan WhatsApp Zulhilmi -->
+                            <a href="https://wa.link/x82hod" target="_blank" class="mt-1 flex items-center text-green-500 hover:text-green-600 font-semibold">
+                                <svg class="whatsapp-icon h-5 w-5 mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.031 3.25a8.773 8.773 0 00-8.771 8.771c0 1.93.513 3.754 1.488 5.31l-.973 3.766 3.864-.95c1.558.85 3.327 1.348 5.433 1.348h.001A8.773 8.773 0 0012.031 3.25zm.001 1.706c4.996 0 8.066 3.256 8.066 7.065 0 3.809-3.07 7.065-8.066 7.065-1.785 0-3.41-.497-4.787-1.348l-.35-.198-3.528.87.893-3.45.204-.378c-.974-1.556-1.488-3.38-1.488-5.31 0-3.809 3.07-7.065 8.066-7.065zM8.336 6.828a.566.566 0 00-.47.165c-.21.21-.491.487-.693.766-.142.193-.243.342-.375.485-.145.158-.28.324-.413.486-.135.163-.26.335-.38.513-.12.178-.23.364-.336.559-.204.38-.415.795-.415 1.253a1.442 1.442 0 00.57 1.13c.484.44 1.144.978 1.874 1.47.765.518 1.58.975 2.502 1.393.921.417 1.897.66 2.766.66 1.144 0 2.05-.386 2.457-1.142.18-.328.286-.777.306-1.127.02-.35-.045-.58-.096-.708-.052-.128-.103-.254-.154-.377-.07-.168-.145-.33-.22-.49-.125-.268-.26-.525-.407-.77-.146-.246-.298-.485-.456-.714-.158-.228-.32-.45-.494-.666a.853.853 0 00-.73-.298c-.183 0-.36.05-.53.153s-.36.26-.53.435c-.172.175-.338.356-.5.543-.162.187-.315.385-.458.595-.143.21-.26.43-.35.654-.088.225-.16.45-.216.68-.056.23-.08.468-.08 0z"/>
+                                </svg>
+                                WhatsApp (Zulhilmi)
+                            </a>
+                        </div>
+                        
+                        <div>
+                            <p class="text-3xl font-bold text-green-600 mb-2">Syamiz</p>
+                            <a href="tel:01126481944" class="text-blue-600 hover:text-blue-800 flex items-center">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h12a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 01-1.414 0L3.293 6.293A1 1 0 013 5.586V3z" /></svg>
+                                011-26481944
+                            </a>
+                            <!-- Pautan WhatsApp Syamiz -->
+                            <a href="https://wa.link/hgtpm3" target="_blank" class="mt-1 flex items-center text-green-500 hover:text-green-600 font-semibold">
+                                <svg class="whatsapp-icon h-5 w-5 mr-2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                                    <path d="M12.031 3.25a8.773 8.773 0 00-8.771 8.771c0 1.93.513 3.754 1.488 5.31l-.973 3.766 3.864-.95c1.558.85 3.327 1.348 5.433 1.348h.001A8.773 8.773 0 0012.031 3.25zm.001 1.706c4.996 0 8.066 3.256 8.066 7.065 0 3.809-3.07 7.065-8.066 7.065-1.785 0-3.41-.497-4.787-1.348l-.35-.198-3.528.87.893-3.45.204-.378c-.974-1.556-1.488-3.38-1.488-5.31 0-3.809 3.07-7.065 8.066-7.065zM8.336 6.828a.566.566 0 00-.47.165c-.21.21-.491.487-.693.766-.142.193-.243.342-.375.485-.145.158-.28.324-.413.486-.135.163-.26.335-.38.513-.12.178-.23.364-.336.559-.204.38-.415.795-.415 1.253a1.442 1.442 0 00.57 1.13c.484.44 1.144.978 1.874 1.47.765.518 1.58.975 2.502 1.393.921.417 1.897.66 2.766.66 1.144 0 2.05-.386 2.457-1.142.18-.328.286-.777.306-1.127.02-.35-.045-.58-.096-.708-.052-.128-.103-.254-.154-.377-.07-.168-.145-.33-.22-.49-.125-.268-.26-.525-.407-.77-.146-.246-.298-.485-.456-.714-.158-.228-.32-.45-.494-.666a.853.853 0 00-.73-.298c-.183 0-.36.05-.53.153s-.36.26-.53.435c-.172.175-.338.356-.5.543-.162.187-.315.385-.458.595-.143.21-.26.43-.35.654-.088.225-.16.45-.216.68-.056.23-.08.468-.08 0z"/>
+                                </svg>
+                                WhatsApp (Syamiz)
+                            </a>
+                        </div>
+                    </div>
+                 </div>
+            </div>
+            
+        </div>
+        
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white py-4 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p class="text-sm">Hak Cipta Terpelihara &copy; SYAHRUL MUNIR (MySTEP ICT) PKD YAN 2025</p>
+            <p class="text-xs mt-1 text-gray-400">Diperkasakan oleh Kakitangan PKD YAN</p>
+        </div>
+    </footer>
+
+    <!-- Skrip untuk Interaktiviti -->
+    <script>
+        // Fungsi untuk menatal (scroll/zoom) ke bahagian tertentu dan menambah highlight
+        function scrollToSection(containerId) {
+            const container = document.getElementById(containerId);
+            const card = container.querySelector('div:first-child');
+            
+            // 1. Tatal ke kedudukan
+            container.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'start'      
+            });
+
+            // 2. Tambah kesan "zoom" (highlight)
+            card.classList.add('highlight');
+
+            // 3. Keluarkan kesan highlight selepas seketika (untuk nampak kesan 'flash')
+            setTimeout(() => {
+                card.classList.remove('highlight');
+            }, 1500); // Highlight selama 1.5 saat
+        }
+
+        // Pendengar untuk Peta Padang Interaktif
+        document.getElementById('map-rules').addEventListener('click', function() {
+            scrollToSection('rules-section-container');
+        });
+
+        document.getElementById('map-registration').addEventListener('click', function() {
+            scrollToSection('registration-section-container');
+        });
+    </script>
+</body>
+</html>
+
